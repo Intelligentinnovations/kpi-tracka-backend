@@ -9,6 +9,7 @@ export class AuthenticatedGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
 
     try {
+      console.log('request.headers.authorization.split(', request.headers.authorization.split(' '))
       request.token = request.headers.authorization.split(' ')[1];
     } catch (e) {
       /* empty */
@@ -17,11 +18,13 @@ export class AuthenticatedGuard implements CanActivate {
     try {
       if (request.token) {
         request.user = await this.cognitoService.getUser(request.token);
-      }
+      console.log('request.user', request.user)
+    }
     } catch (e) {
+      console.log('request.user e', e)
       /* empty */
     }
 
-    return true;
+    return !!request.user;
   }
 }

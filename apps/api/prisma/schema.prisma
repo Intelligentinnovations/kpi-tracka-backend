@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-kysely"
+  output   = "../src/utils/types"
+  fileName = "database.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  name  String
+
+  company CompanyMember[]
+
+  // settings
+  settingMentionInMessage NotificationType[] @default([PUSH, IN_APP])
+  settingReplyInMessage   NotificationType[] @default([PUSH, IN_APP])
+  settingTaskUpdated      NotificationType[] @default([PUSH, IN_APP])
+  settingReminder         NotificationType[] @default([])
+}
+
+model Company {
+  id          Int             @id @default(autoincrement())
+  name        String          @unique
+  email       String          @unique
+  phone       String
+  companySize Int
+  logo        String
+  country     String
+  bio         String
+  companyType CompanyType     @default(INDIVIDUAL)
+  teams       Team[]
+  members     CompanyMember[]
+}
+
+model CompanyMember {
+  id         Int                 @id @default(autoincrement())
+  user       User                @relation(fields: [userId], references: [id])
+  userId     Int
+  company    Company             @relation(fields: [companyId], references: [id])
+  companyId  Int
+  memberRole CompanyRole         @default(INDIVIDUAL)
+  tasks      CompanyMemberTask[]
+  teams      TeamMember[]
+
+  @@unique([userId, companyId])
+}
+
+model Team {
+  id        Int          @id @default(autoincrement())
+  name      String
+  company   Company      @relation(fields: [companyId], references: [id])
+  companyId Int
+  projects  Project[]
+  members   TeamMember[]
+}
+
+model TeamMember {
+  team            Team          @relation(fields: [teamId], references: [id])
+  teamId          Int
+  companyMember   CompanyMember @relation(fields: [companyMemberId], references: [id])
+  companyMemberId Int
+
+  @@id([teamId, companyMemberId])
+}
+
+model CompanyMemberTask {
+  member   CompanyMember @relation(fields: [memberId], references: [id])
+  memberId Int
+  goal     Task          @relation(fields: [taskId], references: [id])
+  taskId   Int
+
+  @@id([taskId, memberId])
+}
+
+model Task {
+  id        Int                 @id @default(autoincrement())
+  assignees CompanyMemberTask[]
+  project   Project             @relation(fields: [projectId], references: [id])
+  projectId Int
+  status    TaskStatus          @default(TODO)
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  startDate   DateTime
+  endDate     DateTime
+
+  team   Team @relation(fields: [teamId], references: [id])
+  teamId Int
+
+  task   Task[]
+  status ProjectStatus @default(TODO)
+}
+
+enum CompanyType {
+  INDIVIDUAL
+  TEAM
+}
+
+enum CompanyRole {
+  INDIVIDUAL
+  TEAM_MEMBER
+  TEAM_LEADER
+  ADMIN
+}
+
+enum NotificationType {
+  PUSH
+  EMAIL
+  IN_APP
+}
+
+enum ProjectStatus {
+  TODO
+  ONGOING
+  PENDING
+  COMPLETED
+  OVERDUE
+  CANCELLED
+}
+
+enum TaskStatus {
+  TODO
+  PROGRESS
+  COMPLETED
+  OVERDUE
+  CANCELLED
+}

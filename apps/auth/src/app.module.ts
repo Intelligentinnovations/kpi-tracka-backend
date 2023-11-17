@@ -13,7 +13,7 @@ import { SecretsModule } from './secrets/secrets.module';
   controllers: [AppController],
   providers: [
     AppService,
-    { provide: APP_GUARD, useClass: AuthenticatedGuard },
+    // { provide: APP_GUARD, useClass: AuthenticatedGuard },
     { provide: APP_INTERCEPTOR, useClass: DefaultInterceptor },
   ],
 })

@@ -1,5 +1,5 @@
 import { loadSecrets } from '@backend-template/secrets';
-import { z, ZodObject } from 'zod';
+import { z,ZodObject } from 'zod';
 
 const secretsSchema = {
   APP_NAME: z.string().max(32),
