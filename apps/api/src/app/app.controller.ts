@@ -6,26 +6,13 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
-// @UseGuards(AuthenticatedGuard)
+@UseGuards(AuthenticatedGuard)
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('health')
+  @Get('test')
   async getData(@Authenticated() user: UserData) {
     console.log('user, ', user)
-    return CustomRes.success(user);
-  }
-
-  @Get('test')
-  async findAll() {
-    this.appService.findAll()
-    return CustomRes.success();
-  }
-
-  @Post('/create-user')
-  async createUser(@Authenticated() user: UserData, @Body() createUserDto: {userType: string}) {
-    console.log('user, ', user)
-    console.log('createUserDto, ', createUserDto)
     return CustomRes.success(user);
   }
 }

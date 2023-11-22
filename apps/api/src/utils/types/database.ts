@@ -46,9 +46,9 @@ export type Company = {
   email: string;
   phone: string;
   companySize: number;
-  logo: string;
+  logo: string | null;
   country: string;
-  bio: string;
+  bio: string | null;
   companyType: Generated<CompanyType>;
 };
 export type CompanyMember = {
@@ -80,6 +80,12 @@ export type Team = {
   name: string;
   companyId: number;
 };
+export type TeamLeadInvite = {
+  id: Generated<number>;
+  teamAdminId: number;
+  inviteEmail: string;
+  inviteRole: Generated<CompanyRole>;
+};
 export type TeamMember = {
   teamId: number;
   companyMemberId: number;
@@ -87,19 +93,23 @@ export type TeamMember = {
 export type User = {
   id: Generated<number>;
   email: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   settingMentionInMessage: Generated<NotificationType[]>;
   settingReplyInMessage: Generated<NotificationType[]>;
   settingTaskUpdated: Generated<NotificationType[]>;
   settingReminder: Generated<NotificationType[]>;
+  createdAt: Generated<Timestamp>;
+  updatedAt: Generated<Timestamp>;
 };
 export type DB = {
-  Company: Company;
-  CompanyMember: CompanyMember;
-  CompanyMemberTask: CompanyMemberTask;
-  Project: Project;
-  Task: Task;
-  Team: Team;
-  TeamMember: TeamMember;
-  User: User;
+  companies: Company;
+  company_member_tasks: CompanyMemberTask;
+  company_members: CompanyMember;
+  projects: Project;
+  tasks: Task;
+  team_lead_invites: TeamLeadInvite;
+  team_members: TeamMember;
+  teams: Team;
+  users: User;
 };

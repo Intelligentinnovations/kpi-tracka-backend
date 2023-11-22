@@ -7,9 +7,11 @@ import { SecretsModule } from '../secrets/secrets.module';
 import { AppController } from './app.controller';
 import { AppRepo } from './app.repo';
 import { AppService } from './app.service';
+import { CompanyModule } from './company/company.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [LibrariesModule, SecretsModule],
+  imports: [LibrariesModule, SecretsModule, UserModule, CompanyModule],
   controllers: [AppController],
   providers: [
     AppService,

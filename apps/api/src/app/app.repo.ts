@@ -9,6 +9,6 @@ export class AppRepo {
   constructor(private dbClient: KyselyService<DB>) {}
 
   findAll(){
-    console.log(this.dbClient.selectFrom('User').compile())
+    console.log(this.dbClient.selectFrom('users').compile())
   }
 }

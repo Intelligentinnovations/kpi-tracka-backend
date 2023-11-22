@@ -10,9 +10,10 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  email String @unique
-  name  String
+  id        Int    @id @default(autoincrement())
+  email     String @unique
+  firstName String
+  lastName  String
 
   company CompanyMember[]
 
@@ -21,6 +22,11 @@ model User {
   settingReplyInMessage   NotificationType[] @default([PUSH, IN_APP])
   settingTaskUpdated      NotificationType[] @default([PUSH, IN_APP])
   settingReminder         NotificationType[] @default([])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("users")
 }
 
 model Company {
@@ -29,25 +35,29 @@ model Company {
   email       String          @unique
   phone       String
   companySize Int
-  logo        String
+  logo        String?
   country     String
-  bio         String
+  bio         String?
   companyType CompanyType     @default(INDIVIDUAL)
   teams       Team[]
   members     CompanyMember[]
+
+  @@map("companies")
 }
 
 model CompanyMember {
-  id         Int                 @id @default(autoincrement())
-  user       User                @relation(fields: [userId], references: [id])
-  userId     Int
-  company    Company             @relation(fields: [companyId], references: [id])
-  companyId  Int
-  memberRole CompanyRole         @default(INDIVIDUAL)
-  tasks      CompanyMemberTask[]
-  teams      TeamMember[]
+  id             Int                 @id @default(autoincrement())
+  user           User                @relation(fields: [userId], references: [id])
+  userId         Int
+  company        Company             @relation(fields: [companyId], references: [id])
+  companyId      Int
+  memberRole     CompanyRole         @default(INDIVIDUAL)
+  tasks          CompanyMemberTask[]
+  teams          TeamMember[]
+  TeamLeadInvite TeamLeadInvite[]
 
   @@unique([userId, companyId])
+  @@map("company_members")
 }
 
 model Team {
@@ -57,6 +67,8 @@ model Team {
   companyId Int
   projects  Project[]
   members   TeamMember[]
+
+  @@map("teams")
 }
 
 model TeamMember {
@@ -66,15 +78,17 @@ model TeamMember {
   companyMemberId Int
 
   @@id([teamId, companyMemberId])
+  @@map("team_members")
 }
 
 model CompanyMemberTask {
   member   CompanyMember @relation(fields: [memberId], references: [id])
   memberId Int
-  goal     Task          @relation(fields: [taskId], references: [id])
+  task     Task          @relation(fields: [taskId], references: [id])
   taskId   Int
 
   @@id([taskId, memberId])
+  @@map("company_member_tasks")
 }
 
 model Task {
@@ -83,6 +97,8 @@ model Task {
   project   Project             @relation(fields: [projectId], references: [id])
   projectId Int
   status    TaskStatus          @default(TODO)
+
+  @@map("tasks")
 }
 
 model Project {
@@ -97,6 +113,18 @@ model Project {
 
   task   Task[]
   status ProjectStatus @default(TODO)
+
+  @@map("projects")
+}
+
+model TeamLeadInvite {
+  id          Int           @id @default(autoincrement())
+  teamAdmin   CompanyMember @relation(fields: [teamAdminId], references: [id])
+  teamAdminId Int
+  inviteEmail String
+  inviteRole  CompanyRole   @default(TEAM_MEMBER)
+
+  @@map("team_lead_invites")
 }
 
 enum CompanyType {
