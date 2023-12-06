@@ -5,7 +5,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-import { CompanyRole } from '../../utils/types';
+import { CompanyRole } from '../utils/types';
 import { AuthorizedUserGuard } from './authorized-user.guard';
 import { RoleGuard } from './role.guard';
 

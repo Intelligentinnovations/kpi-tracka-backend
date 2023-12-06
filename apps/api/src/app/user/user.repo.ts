@@ -3,7 +3,7 @@ import { Optional } from '@backend-template/helpers';
 import { Injectable } from '@nestjs/common';
 import { Insertable, Selectable } from 'kysely';
 
-import { DB, User } from '../../utils/types';
+import { DB, DBUserData, Invite, User } from '../../utils/types';
 
 @Injectable()
 export class UserRepo {
@@ -23,7 +23,25 @@ export class UserRepo {
         .executeTakeFirst()
     );
   }
-  updateUserById(user: Omit<Selectable<User>,'createdAt'|'updatedAt' >) {
+  sendInvite(invite: Insertable<Invite>) {
+    return Optional.of(
+      this.dbClient
+        .insertInto('team_invites')
+        .values(invite)
+        .returningAll()
+        .executeTakeFirst()
+    );
+  }
+  checkInvite(invite: Selectable<Pick<Invite, 'id'>>) {
+    return Optional.of(
+      this.dbClient
+        .selectFrom('team_invites')
+        .where('id','=', invite.id)
+        .selectAll()
+        .executeTakeFirst()
+    );
+  }
+  updateUserById(user: Omit<DBUserData,'createdAt'|'updatedAt' >) {
     return Optional.of(
       this.dbClient
         .updateTable('users')

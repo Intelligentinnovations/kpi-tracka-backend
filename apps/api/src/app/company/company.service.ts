@@ -1,7 +1,8 @@
 import { CustomRes } from '@backend-template/http';
 import { Injectable } from '@nestjs/common';
 
-import { AdminData, CompanyMemberData } from '../../utils/schema/user.schema';
+import { AdminData, CompanyMemberData, IndividualData } from '../../utils/schema/user.schema';
+import { CompanyType } from '../../utils/types';
 import { CompanyRepo } from './company.repo';
 
 @Injectable()
@@ -14,7 +15,21 @@ export class CompanyService {
   // createCompany(){
   //   this.repo.findAllUsers()
   // }
-  async createCompany(adminData:AdminData){
+  async createIndividualCompany(adminData:IndividualData, email: string){
+    const newCompany = await this.repo.createCompany({
+      name: `${CompanyType.INDIVIDUAL}|${email}`,
+      email,
+      phone: adminData.companyPhone,
+      companySize: adminData.companySize,
+      logo: adminData.companyLogo,
+      country: adminData.companyCountry,
+      bio: adminData.companyBio,
+      companyType: adminData.companyType,
+    }).elseThrow(CustomRes.serverError('failed to create company'))
+
+    return newCompany
+  }
+  async createTeamCompany(adminData:AdminData){
     const newCompany = await this.repo.createCompany({
       name: adminData.companyName,
       email: adminData.companyEmail,

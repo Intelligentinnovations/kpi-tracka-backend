@@ -61,6 +61,13 @@ export type CompanyMemberTask = {
   memberId: number;
   taskId: number;
 };
+export type Invite = {
+  id: Generated<number>;
+  teamAdminId: number;
+  companyId: number;
+  inviteEmail: string;
+  inviteRole: Generated<CompanyRole>;
+};
 export type Project = {
   id: Generated<number>;
   title: string;
@@ -80,12 +87,6 @@ export type Team = {
   name: string;
   companyId: number;
 };
-export type TeamLeadInvite = {
-  id: Generated<number>;
-  teamAdminId: number;
-  inviteEmail: string;
-  inviteRole: Generated<CompanyRole>;
-};
 export type TeamMember = {
   teamId: number;
   companyMemberId: number;
@@ -93,8 +94,8 @@ export type TeamMember = {
 export type User = {
   id: Generated<number>;
   email: string;
-  firstName: string;
-  lastName: string;
+  firstName: string | null;
+  lastName: string | null;
   settingMentionInMessage: Generated<NotificationType[]>;
   settingReplyInMessage: Generated<NotificationType[]>;
   settingTaskUpdated: Generated<NotificationType[]>;
@@ -108,7 +109,7 @@ export type DB = {
   company_members: CompanyMember;
   projects: Project;
   tasks: Task;
-  team_lead_invites: TeamLeadInvite;
+  team_invites: Invite;
   team_members: TeamMember;
   teams: Team;
   users: User;

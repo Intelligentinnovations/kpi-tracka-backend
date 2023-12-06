@@ -4,28 +4,50 @@ import {
   AuthenticatedGuard,
 } from '@backend-template/rest-server';
 import { UserData } from '@backend-template/types';
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 
-import { InviteData, InviteSchema } from '../../utils/schema';
+import { UseRole } from '../../libraries/authorized-user.decorator';
+import { UserDataParam } from '../../tools/user-data.decorator';
+import { AcceptInviteData, AcceptInviteSchema, InviteData, InviteSchema } from '../../utils/schema';
 import {
   AdminData,
   AdminSchema,
+  IndividualData,
+  IndividualSchema,
 } from '../../utils/schema/user.schema';
+import { CompanyRole, DBUserAndCompanyData, DBUserData } from '../../utils/types';
 import { UserService } from './user.service';
 
 @Controller('users')
-@UseGuards(AuthenticatedGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('create-admin')
+  @UseGuards(AuthenticatedGuard)
   async createAdmin(
     @Authenticated() user: UserData,
-    @Body(new ZodValidationPipe(AdminSchema)) adminDto: AdminData
+    @Body(new ZodValidationPipe(AdminSchema)) dto: AdminData
   ) {
-    return CustomRes.success(await this.userService.createAdmin(user,adminDto));
+    return CustomRes.success(await this.userService.createAdmin(user,dto));
   }
 
+  @Post('create-admin')
+  @UseGuards(AuthenticatedGuard)
+  async getUserData(
+    @Authenticated() user: UserData,
+    @Body(new ZodValidationPipe(AdminSchema)) dto: AdminData
+  ) {
+    return CustomRes.success(await this.userService.createAdmin(user,dto));
+  }
+
+  @Post('create-individual')
+  @UseGuards(AuthenticatedGuard)
+  async createIndividual(
+    @Authenticated() user: UserData,
+    @Body(new ZodValidationPipe(IndividualSchema)) dto: IndividualData
+  ) {
+    return CustomRes.success(await this.userService.createIndividual(user,dto));
+  }
   @Post('create-team-leader')
   async createTeamLeader(
     @Authenticated() user: UserData,
@@ -40,28 +62,18 @@ export class UserController {
   }
 
   @Post('send-invite')
+  @UseRole(CompanyRole.ADMIN)
   async sendTeamMemberInvite(
-    @Authenticated() user: UserData,
+    @UserDataParam() userData: DBUserAndCompanyData,
     @Body(new ZodValidationPipe(InviteSchema)) inviteDto: InviteData
   ) {
-    console.log('createUserDto, ', inviteDto);
-    return CustomRes.success(inviteDto);
+    return CustomRes.success(await this.userService.sendInvite(userData.user, inviteDto));
   }
-  
-  @Get('accept-invite')
+  @Post('accept-invite/:id')
   async acceptTeamMemberInvite(
-    @Authenticated() user: UserData,
-    @Body() createUserDto: { userType: string }
+    @Param('id', new ZodValidationPipe(AcceptInviteSchema)) id: AcceptInviteData
   ) {
-    return CustomRes.success(user);
+    return CustomRes.success(await this.userService.acceptInvite(id));
   }
-  @Post('create-team-member')
-  async createTeamMember(
-    @Authenticated() user: UserData,
-    @Body() createUserDto: { userType: string }
-  ) {
-    console.log('user, ', user);
-    console.log('createUserDto, ', createUserDto);
-    return CustomRes.success(user);
-  }
+
 }

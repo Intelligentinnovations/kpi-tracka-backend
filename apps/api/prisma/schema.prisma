@@ -12,8 +12,8 @@ datasource db {
 model User {
   id        Int    @id @default(autoincrement())
   email     String @unique
-  firstName String
-  lastName  String
+  firstName String?
+  lastName  String?
 
   company CompanyMember[]
 
@@ -41,20 +41,21 @@ model Company {
   companyType CompanyType     @default(INDIVIDUAL)
   teams       Team[]
   members     CompanyMember[]
+  invites     Invite[]
 
   @@map("companies")
 }
 
 model CompanyMember {
-  id             Int                 @id @default(autoincrement())
-  user           User                @relation(fields: [userId], references: [id])
-  userId         Int
-  company        Company             @relation(fields: [companyId], references: [id])
-  companyId      Int
-  memberRole     CompanyRole         @default(INDIVIDUAL)
-  tasks          CompanyMemberTask[]
-  teams          TeamMember[]
-  TeamLeadInvite TeamLeadInvite[]
+  id         Int                 @id @default(autoincrement())
+  user       User                @relation(fields: [userId], references: [id])
+  userId     Int
+  company    Company             @relation(fields: [companyId], references: [id])
+  companyId  Int
+  memberRole CompanyRole         @default(INDIVIDUAL)
+  tasks      CompanyMemberTask[]
+  teams      TeamMember[]
+  invites    Invite[]
 
   @@unique([userId, companyId])
   @@map("company_members")
@@ -117,14 +118,16 @@ model Project {
   @@map("projects")
 }
 
-model TeamLeadInvite {
+model Invite {
   id          Int           @id @default(autoincrement())
   teamAdmin   CompanyMember @relation(fields: [teamAdminId], references: [id])
   teamAdminId Int
+  company     Company       @relation(fields: [companyId], references: [id])
+  companyId   Int
   inviteEmail String
   inviteRole  CompanyRole   @default(TEAM_MEMBER)
 
-  @@map("team_lead_invites")
+  @@map("team_invites")
 }
 
 enum CompanyType {
