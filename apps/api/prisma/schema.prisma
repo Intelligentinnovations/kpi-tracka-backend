@@ -10,8 +10,8 @@ datasource db {
 }
 
 model User {
-  id        Int    @id @default(autoincrement())
-  email     String @unique
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email     String  @unique
   firstName String?
   lastName  String?
 
@@ -30,7 +30,7 @@ model User {
 }
 
 model Company {
-  id          Int             @id @default(autoincrement())
+  id          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String          @unique
   email       String          @unique
   phone       String
@@ -47,11 +47,11 @@ model Company {
 }
 
 model CompanyMember {
-  id         Int                 @id @default(autoincrement())
+  id         String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   user       User                @relation(fields: [userId], references: [id])
-  userId     Int
+  userId     String              @db.Uuid
   company    Company             @relation(fields: [companyId], references: [id])
-  companyId  Int
+  companyId  String              @db.Uuid
   memberRole CompanyRole         @default(INDIVIDUAL)
   tasks      CompanyMemberTask[]
   teams      TeamMember[]
@@ -62,10 +62,10 @@ model CompanyMember {
 }
 
 model Team {
-  id        Int          @id @default(autoincrement())
+  id        String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String
   company   Company      @relation(fields: [companyId], references: [id])
-  companyId Int
+  companyId String       @db.Uuid
   projects  Project[]
   members   TeamMember[]
 
@@ -74,9 +74,9 @@ model Team {
 
 model TeamMember {
   team            Team          @relation(fields: [teamId], references: [id])
-  teamId          Int
+  teamId          String        @db.Uuid
   companyMember   CompanyMember @relation(fields: [companyMemberId], references: [id])
-  companyMemberId Int
+  companyMemberId String        @db.Uuid
 
   @@id([teamId, companyMemberId])
   @@map("team_members")
@@ -84,33 +84,33 @@ model TeamMember {
 
 model CompanyMemberTask {
   member   CompanyMember @relation(fields: [memberId], references: [id])
-  memberId Int
+  memberId String        @db.Uuid
   task     Task          @relation(fields: [taskId], references: [id])
-  taskId   Int
+  taskId   String        @db.Uuid
 
   @@id([taskId, memberId])
   @@map("company_member_tasks")
 }
 
 model Task {
-  id        Int                 @id @default(autoincrement())
+  id        String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   assignees CompanyMemberTask[]
   project   Project             @relation(fields: [projectId], references: [id])
-  projectId Int
+  projectId String              @db.Uuid
   status    TaskStatus          @default(TODO)
 
   @@map("tasks")
 }
 
 model Project {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title       String
   description String
   startDate   DateTime
   endDate     DateTime
 
-  team   Team @relation(fields: [teamId], references: [id])
-  teamId Int
+  team   Team   @relation(fields: [teamId], references: [id])
+  teamId String @db.Uuid
 
   task   Task[]
   status ProjectStatus @default(TODO)
@@ -119,11 +119,11 @@ model Project {
 }
 
 model Invite {
-  id          Int           @id @default(autoincrement())
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   teamAdmin   CompanyMember @relation(fields: [teamAdminId], references: [id])
-  teamAdminId Int
+  teamAdminId String        @db.Uuid
   company     Company       @relation(fields: [companyId], references: [id])
-  companyId   Int
+  companyId   String        @db.Uuid
   inviteEmail String
   inviteRole  CompanyRole   @default(TEAM_MEMBER)
 

@@ -14,7 +14,7 @@ import {
   AdminSchema,
   IndividualData,
   IndividualSchema,
-} from '../../utils/schema/user.schema';
+} from '../../utils/schema';
 import { CompanyRole, DBUserAndCompanyData, DBUserData } from '../../utils/types';
 import { UserService } from './user.service';
 
