@@ -4,7 +4,7 @@ import {
   AuthenticatedGuard,
 } from '@backend-template/rest-server';
 import { UserData } from '@backend-template/types';
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
 
 import { UseRole } from '../../libraries/authorized-user.decorator';
 import { UserDataParam } from '../../tools/user-data.decorator';
@@ -15,7 +15,7 @@ import {
   IndividualData,
   IndividualSchema,
 } from '../../utils/schema';
-import { CompanyRole, DBUserAndCompanyData, DBUserData } from '../../utils/types';
+import { CompanyRole, DBUserAndCompanyData } from '../../utils/types';
 import { UserService } from './user.service';
 
 @Controller('users')

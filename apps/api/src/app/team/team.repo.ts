@@ -3,7 +3,7 @@ import { Optional } from '@backend-template/helpers';
 import { Injectable } from '@nestjs/common';
 import { Insertable, Selectable } from 'kysely';
 
-import { Company,CompanyMember,DB, Team } from '../../utils/types';
+import {DB, Team } from '../../utils/types';
 
 @Injectable()
 export class TeamRepo{
