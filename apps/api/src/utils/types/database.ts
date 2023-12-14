@@ -41,7 +41,7 @@ export const TaskStatus = {
 } as const;
 export type TaskStatus = typeof TaskStatus[keyof typeof TaskStatus];
 export type Company = {
-  id: Generated<number>;
+  id: Generated<string>;
   name: string;
   email: string;
   phone: string;
@@ -52,47 +52,47 @@ export type Company = {
   companyType: Generated<CompanyType>;
 };
 export type CompanyMember = {
-  id: Generated<number>;
-  userId: number;
-  companyId: number;
+  id: Generated<string>;
+  userId: string;
+  companyId: string;
   memberRole: Generated<CompanyRole>;
 };
 export type CompanyMemberTask = {
-  memberId: number;
-  taskId: number;
+  memberId: string;
+  taskId: string;
 };
 export type Invite = {
-  id: Generated<number>;
-  teamAdminId: number;
-  companyId: number;
+  id: Generated<string>;
+  teamAdminId: string;
+  companyId: string;
   inviteEmail: string;
   inviteRole: Generated<CompanyRole>;
 };
 export type Project = {
-  id: Generated<number>;
+  id: Generated<string>;
   title: string;
   description: string;
   startDate: Timestamp;
   endDate: Timestamp;
-  teamId: number;
+  teamId: string;
   status: Generated<ProjectStatus>;
 };
 export type Task = {
-  id: Generated<number>;
-  projectId: number;
+  id: Generated<string>;
+  projectId: string;
   status: Generated<TaskStatus>;
 };
 export type Team = {
-  id: Generated<number>;
+  id: Generated<string>;
   name: string;
-  companyId: number;
+  companyId: string;
 };
 export type TeamMember = {
-  teamId: number;
-  companyMemberId: number;
+  teamId: string;
+  companyMemberId: string;
 };
 export type User = {
-  id: Generated<number>;
+  id: Generated<string>;
   email: string;
   firstName: string | null;
   lastName: string | null;

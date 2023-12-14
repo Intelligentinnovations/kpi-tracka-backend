@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 // import { UserController } from './company.controller';
-import { CompanyRepo } from './company.repo';
+import { CompanyRepo } from '../repo/company.repo';
 import { CompanyService } from './company.service';
 
 @Module({

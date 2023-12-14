@@ -20,31 +20,12 @@ export class TeamRepo{
   }
 
   update(data: Selectable<Team>) {
-    return this.client
+    return Optional.of(this.client
       .updateTable('teams')
       .set(data)
       .where('id', '=', data.id)
-      .execute();
-  }
-
-  delete(id: string) {
-    return Optional.of( this.client
-      .deleteFrom(['teams'])
-      .where('id', '=', id)
       .execute()
-  )
+    )
   }
 
-
-
-  findByIdAndTalent(id: string, talentId: string) {
-    return Optional.of(
-      this.client
-        .selectFrom('TalentEducationBackground')
-        .where('id', '=', id)
-        .where('talentId', '=', talentId)
-        .selectAll()
-        .executeTakeFirst()
-    );
-  }
 }

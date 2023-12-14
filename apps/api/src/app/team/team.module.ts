@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 // import { TeamController } from './company.controller';
-import { TeamRepo } from './team.repo';
+import { TeamRepo } from '../repo/team.repo';
 import { TeamService } from './team.service';
 
 @Module({

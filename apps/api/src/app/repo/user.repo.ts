@@ -51,7 +51,7 @@ export class UserRepo {
         .executeTakeFirst()
     );
   }
-  findUserById(id: number) {
+  findUserById(id: string) {
     return Optional.of(
       this.dbClient
         .selectFrom('users')

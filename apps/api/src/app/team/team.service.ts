@@ -1,17 +1,11 @@
-import { CustomRes } from '@backend-template/http';
 import { Injectable } from '@nestjs/common';
 
-import { AdminData, CompanyMemberData, IndividualData } from '../../utils/schema/user.schema';
-import { CompanyType } from '../../utils/types';
-import { TeamRepo } from './team.repo';
+import { TeamRepo } from '../repo/team.repo';
 
 @Injectable()
 export class TeamService {
   constructor(private repo: TeamRepo) {}
-  
-  getAll(){
-    return this.repo.findAllCompanies()
-  }
+
 
   getOne(){}
   createOne(){}
@@ -20,10 +14,6 @@ export class TeamService {
   addTeamMember(){}
   removeTeamMember(){}
 
-
-  findAll(){
-    return this.repo.findAllCompanies()
-  }
   // async createIndividualCompany(adminData:IndividualData, email: string){
   //   const newCompany = await this.repo.createCompany({
   //     name: `${CompanyType.INDIVIDUAL}|${email}`,
@@ -52,7 +42,7 @@ export class TeamService {
 
   //   return newCompany
   // }
-  
+
   // async createCompanyMember(memberData:CompanyMemberData){
   //   const newCompanyMember = await this.repo.createCompanyMember({
   //     userId: memberData.userId,

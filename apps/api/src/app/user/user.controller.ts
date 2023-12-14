@@ -31,15 +31,6 @@ export class UserController {
     return CustomRes.success(await this.userService.createAdmin(user,dto));
   }
 
-  @Post('create-admin')
-  @UseGuards(AuthenticatedGuard)
-  async getUserData(
-    @Authenticated() user: UserData,
-    @Body(new ZodValidationPipe(AdminSchema)) dto: AdminData
-  ) {
-    return CustomRes.success(await this.userService.createAdmin(user,dto));
-  }
-
   @Post('create-individual')
   @UseGuards(AuthenticatedGuard)
   async createIndividual(

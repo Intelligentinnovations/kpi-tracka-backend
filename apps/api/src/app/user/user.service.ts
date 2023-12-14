@@ -7,7 +7,7 @@ import { AdminData, IndividualData } from '../../utils/schema/user.schema';
 import { CompanyRole, DBUserData } from '../../utils/types';
 import { CompanyService } from '../company/company.service';
 import { decryptString, encryptString } from './../../tools/encrpt-text';
-import { UserRepo } from './user.repo';
+import { UserRepo } from '../repo/user.repo';
 
 @Injectable()
 export class UserService {
@@ -78,7 +78,7 @@ export class UserService {
     })
     .elseThrow(CustomRes.serverError('failed to create user'));
   console.log({ newUser });
-  
+
     // and the user and company to companyMember table
     const newCompanyMember = await this.companyService.createCompanyMember({
       userId: newUser.id,

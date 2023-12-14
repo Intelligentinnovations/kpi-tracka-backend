@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 
 import { AdminData, CompanyMemberData, IndividualData } from '../../utils/schema/user.schema';
 import { CompanyType } from '../../utils/types';
-import { CompanyRepo } from './company.repo';
+import { CompanyRepo } from '../repo/company.repo';
 
 @Injectable()
 export class CompanyService {
@@ -43,7 +43,7 @@ export class CompanyService {
 
     return newCompany
   }
-  
+
   async createCompanyMember(memberData:CompanyMemberData){
     const newCompanyMember = await this.repo.createCompanyMember({
       userId: memberData.userId,

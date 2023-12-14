@@ -1,16 +1,6 @@
-import { CustomRes, ZodValidationPipe } from '@backend-template/http';
-import {
-  Authenticated,
-  AuthenticatedGuard,
-} from '@backend-template/rest-server';
-import { UserData } from '@backend-template/types';
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {Controller } from '@nestjs/common';
 
 import { UseRole } from '../../libraries/authorized-user.decorator';
-import {
-  AdminData,
-  AdminSchema,
-} from '../../utils/schema/user.schema';
 import { CompanyRole } from '../../utils/types';
 import { TeamService } from './team.service';
 
@@ -18,10 +8,6 @@ import { TeamService } from './team.service';
 @UseRole(CompanyRole.ADMIN, CompanyRole.TEAM_LEADER)
 export class CompanyController {
   constructor(private readonly teamService: TeamService) {}
-  @Get()
-  getAll(){
-    return CustomRes.success(this.teamService.getAll())
-  }
 
   getOne(){}
   createOne(){}
